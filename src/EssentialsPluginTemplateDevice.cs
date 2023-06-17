@@ -38,16 +38,30 @@ namespace EssentialsPluginTemplate
                 // Start the server
                 server = new GenericTcpIpServer(string.Format("{0}-server", this.Name));
                 server.Port = _Config.serverPort;
+                server.ClientConnectionChange += new System.EventHandler<GenericTcpServerSocketStatusChangeEventArgs>(server_ClientConnectionChange);
                 server.TextReceived += new System.EventHandler<GenericTcpServerCommMethodReceiveTextArgs>(server_TextReceived);
                 server.Listen();
                 server.MaxClients = 1;
             }
 
+            void server_ClientConnectionChange(object sender, GenericTcpServerSocketStatusChangeEventArgs e)
+            {
+                if (e.ClientStatus == SocketStatus.SOCKET_STATUS_CONNECTED)
+                {
+                    client.Connect();
+                }
+                else if (e.ClientStatus != SocketStatus.SOCKET_STATUS_CONNECTED || e.ClientStatus != SocketStatus.SOCKET_STATUS_WAITING)
+                {
+                    if (client.Connected)
+                    {
+                        client.Disconnect();
+                    }
+                }
+            }
+
             void client_ConnectionChange(object sender, GenericSocketStatusChageEventArgs e)
             {
-
                     Debug.Console(0, this, "Error connecting client: {0}", e.Client.ClientStatus);
-               
             }
 
             void server_TextReceived(object sender, GenericTcpServerCommMethodReceiveTextArgs e)
