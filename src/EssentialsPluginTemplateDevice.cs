@@ -61,7 +61,11 @@ namespace EssentialsPluginTemplate
 
             void client_ConnectionChange(object sender, GenericSocketStatusChageEventArgs e)
             {
-                    Debug.Console(0, this, "Error connecting client: {0}", e.Client.ClientStatus);
+#if SERIES4
+                Debug.LogInformation(this, "Client connection status: {status}", e.Client.ClientStatus);
+#else
+                Debug.Console(0, this, "Error connecting client: {0}", e.Client.ClientStatus);
+#endif
             }
 
             void server_TextReceived(object sender, GenericTcpServerCommMethodReceiveTextArgs e)
@@ -72,8 +76,11 @@ namespace EssentialsPluginTemplate
                     client.SendText(e.Text);
                 }
 
-                // Log data
+#if SERIES4
+                Debug.LogInformation(this, "Received data from server: {text}", e.Text);
+#else
                 Debug.Console(0, this, "Received data from server: {0}", e.Text);
+#endif
             }
 
 

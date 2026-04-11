@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<ProjectType>ProgramLibrary</ProjectType>
+	</PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<RootNamespace>EssentialsPluginTemplate</RootNamespace>
+		<Deterministic>false</Deterministic>
+		<AssemblyTitle>PepperDash.Essentials.Plugin.TcpProxy</AssemblyTitle>
+		<Company>PepperDash Technology</Company>
+		<Description>Essentials plugin that forwards TCP connections between a local server port and a remote client address.</Description>
+		<Copyright>Copyright 2025</Copyright>
+		<Version>1.0.0-local</Version>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<InformationalVersion>$(Version)</InformationalVersion>
+		<OutputPath>bin\$(Configuration)\</OutputPath>
+		<Authors>PepperDash Technology</Authors>
+		<PackageId>PepperDash.Essentials.Plugin.TcpProxy</PackageId>
+		<PackageProjectUrl>https://github.com/PepperDash/epi-utility-tcpproxy</PackageProjectUrl>
+		<PackageTags>crestron 4series essentials plugin tcpproxy</PackageTags>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants);SERIES4</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants);SERIES4</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Properties\**" />
+		<EmbeddedResource Remove="Properties\**" />
+		<None Remove="Properties\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="PepperDashEssentials" Version="2.28.1">
+			<ExcludeAssets>runtime</ExcludeAssets>
+		</PackageReference>
+	</ItemGroup>
+</Project>

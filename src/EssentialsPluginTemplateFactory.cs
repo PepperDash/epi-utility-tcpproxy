@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
-using Crestron.SimplSharpPro.UI;
 
 namespace EssentialsPluginTemplate
 {
@@ -25,7 +24,7 @@ namespace EssentialsPluginTemplate
 		/// <example>
  		/// Set the minimum Essentials Framework Version
 		/// <code>
-		/// MinimumEssentialsFrameworkVersion = "1.6.4;
+		/// MinimumEssentialsFrameworkVersion = "1.6.4";
         /// </code>
 		/// In the constructor we initialize the list with the typenames that will build an instance of this device
         /// <code>
@@ -34,12 +33,11 @@ namespace EssentialsPluginTemplate
 		/// </example>
         public EssentialsPluginTemplateFactory()
         {
-            // Set the minimum Essentials Framework Version
-			// TODO [ ] Update the Essentials minimum framework version which this plugin has been tested against
-			MinimumEssentialsFrameworkVersion = "1.6.4";
-
-            // In the constructor we initialize the list with the typenames that will build an instance of this device
-			// TODO [ ] Update the TypeNames for the plugin being developed
+#if SERIES4
+            MinimumEssentialsFrameworkVersion = "2.28.1";
+#else
+            MinimumEssentialsFrameworkVersion = "1.6.4";
+#endif
             TypeNames = new List<string>() { "TcpProxy" };
         }
         
@@ -55,18 +53,30 @@ namespace EssentialsPluginTemplate
 		/// <seealso cref="PepperDash.Core.eControlMethod"/>
         public override EssentialsDevice BuildDevice(PepperDash.Essentials.Core.Config.DeviceConfig dc)
         {
+#if SERIES4
+            Debug.LogVerbose("[{key}] Factory Attempting to create new device from type: {type}", dc.Key, dc.Type);
+#else
             Debug.Console(1, "[{0}] Factory Attempting to create new device from type: {1}", dc.Key, dc.Type);
+#endif
 
             var propertiesConfig = dc.Properties.ToObject<TcpProxyConfigObject>();
             if (propertiesConfig == null)
             {
+#if SERIES4
+                Debug.LogError("[{key}] Factory: failed to read properties config for {name}", dc.Key, dc.Name);
+#else
                 Debug.Console(0, "[{0}] Factory: failed to read properties config for {1}", dc.Key, dc.Name);
+#endif
                 return null;
             }
             var comms = CommFactory.CreateCommForDevice(dc);
             if (comms == null)
             {
+#if SERIES4
+                Debug.LogError("[{key}] Factory Notice: No control object present for device {name}", dc.Key, dc.Name);
+#else
                 Debug.Console(1, "[{0}] Factory Notice: No control object present for device {1}", dc.Key, dc.Name);
+#endif
                 return null;
             }
             else

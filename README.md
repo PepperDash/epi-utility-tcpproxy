@@ -1,4 +1,6 @@
-# Essentials Plugin Template (c) 2020
+# epi-utility-tcpproxy
+
+[![Essentials-v2](https://img.shields.io/badge/Essentials-v2-teal.svg)](https://github.com/PepperDash/Essentials)
 
 ## License
 
@@ -6,53 +8,46 @@ Provided under MIT license
 
 ## Overview
 
-Fork this repo when creating a new plugin for Essentials. For more information about plugins, refer to the Essentials Wiki [Plugins](https://github.com/PepperDash/Essentials/wiki/Plugins) article.
-
-This repo contains example classes for the three main categories of devices:
-* `EssentialsPluginTemplateDevice`: Used for most third party devices which require communication over a streaming mechanism such as a Com port, TCP/SSh/UDP socket, CEC, etc
-* `EssentialsPluginTemplateLogicDevice`:  Used for devices that contain logic, but don't require any communication with third parties outside the program
-* `EssentialsPluginTemplateCrestronDevice`:  Used for devices that represent a piece of Crestron hardware
-
-There are matching factory classes for each of the three categories of devices.  The `EssentialsPluginTemplateConfigObject` should be used as a template and modified for any of the categories of device.  Same goes for the `EssentialsPluginTemplateBridgeJoinMap`.
-
-This also illustrates how a plugin can contain multiple devices.
-
-## Cloning Instructions
-
-After forking this repository into your own GitHub space, you can create a new repository using this one as the template.  Then you must install the necessary dependencies as indicated below.
+This plugin acts as a TCP proxy, forwarding connections from a local server port to a configured remote client address and port. It supports both Essentials v1.x (3-series) and Essentials v2.x (4-series).
 
 ## Dependencies
 
-The [Essentials](https://github.com/PepperDash/Essentials) libraries are required. They referenced via nuget. You must have nuget.exe installed and in the `PATH` environment variable to use the following command. Nuget.exe is available at [nuget.org](https://dist.nuget.org/win-x86-commandline/latest/nuget.exe).
+The [Essentials](https://github.com/PepperDash/Essentials) libraries are required. They are referenced via NuGet.
 
-### Installing Dependencies
+- **4-series (Essentials v2.x):** Uses `PepperDashEssentials` v2.28.1 via `PackageReference` in the SDK-style csproj.
+- **3-series (Essentials v1.x):** Uses `PepperDashEssentials` v1.x via `packages.config` (maintained on the `maintenance/1x` branch).
 
-To install dependencies once nuget.exe is installed, run the following command from the root directory of your repository:
-`nuget install .\packages.config -OutputDirectory .\packages -excludeVersion`.
-Alternatively, you can simply run the `GetPackages.bat` file.
-To verify that the packages installed correctly, open the plugin solution in your repo and make sure that all references are found, then try and build it.
+## Device Configuration
 
-### Installing Different versions of PepperDash Core
+Example device configuration JSON:
 
-If you need a different version of PepperDash Core, use the command `nuget install .\packages.config -OutputDirectory .\packages -excludeVersion -Version {versionToGet}`. Omitting the `-Version` option will pull the version indicated in the packages.config file.
+```json
+{
+  "key": "tcpProxy-1",
+  "name": "TCP Proxy",
+  "type": "TcpProxy",
+  "properties": {
+    "clientAddress": "192.168.1.100",
+    "clientPort": 23,
+    "serverPort": 8023
+  }
+}
+```
 
-### Instructions for Renaming Solution and Files
+### Configuration Properties
 
-See the Task List in Visual Studio for a guide on how to start using the template.  There is extensive inline documentation and examples as well.
+| Property        | Type   | Description                              |
+|-----------------|--------|------------------------------------------|
+| `clientAddress` | string | Remote IP address to forward traffic to  |
+| `clientPort`    | int    | Remote port to connect to                |
+| `serverPort`    | int    | Local port to listen on                  |
 
-For renaming instructions in particular, see the XML `remarks` tags on class definitions
+## Building
 
-## Build Instructions (PepperDash Internal) 
+### 4-series (Essentials v2.x)
 
-## Generating Nuget Package 
+Open `epi-utility-tcpproxy.4Series.sln` and build. Output (`.cplz` and `.nupkg`) is placed in the `output/` folder.
 
-In the solution folder is a file named "PDT.EssentialsPluginTemplate.nuspec" 
+### 3-series (Essentials v1.x)
 
-1. Rename the file to match your plugin solution name 
-2. Edit the file to include your project specifics including
-    1. <id>PepperDash.Essentials.Plugin.MakeModel</id> Convention is to use the prefix "PepperDash.Essentials.Plugin" and include the MakeModel of the device. 
-    2. <projectUrl>https://github.com/PepperDash/EssentialsPluginTemplate</projectUrl> Change to your url to the project repo
-
-There is no longer a requirement to adjust workflow files for nuget generation for private and public repositories.  This is now handled automatically in the workflow.
-
-__If you do not make these changes to the nuspec file, the project will not generate a nuget package__
+Switch to the `maintenance/1x` branch and open `epi-utility-tcpproxy.3Series.sln`. Run `GetPackages.bat` to restore NuGet packages, then build.
