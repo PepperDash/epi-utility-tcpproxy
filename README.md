@@ -56,3 +56,74 @@ In the solution folder is a file named "PDT.EssentialsPluginTemplate.nuspec"
 There is no longer a requirement to adjust workflow files for nuget generation for private and public repositories.  This is now handled automatically in the workflow.
 
 __If you do not make these changes to the nuspec file, the project will not generate a nuget package__
+<!-- START Minimum Essentials Framework Versions -->
+### Minimum Essentials Framework Versions
+
+- 1.6.4
+<!-- END Minimum Essentials Framework Versions -->
+<!-- START Config Example -->
+### Config Example
+
+```json
+{
+    "key": "GeneratedKey",
+    "uid": 1,
+    "name": "GeneratedName",
+    "type": "TcpProxy",
+    "group": "Group",
+    "properties": {
+        "clientAddress": "SampleString",
+        "clientPort": 0,
+        "serverPort": 0,
+        "DeviceDictionary": {
+            "SampleString": {
+                "name": "SampleString",
+                "value": "SampleValue"
+            }
+        }
+    }
+}
+```
+<!-- END Config Example -->
+<!-- START Supported Types -->
+### Supported Types
+
+- TcpProxy
+<!-- END Supported Types -->
+<!-- START Join Maps -->
+### Join Maps
+
+#### Digitals
+
+| Join | Type (RW) | Description |
+| --- | --- | --- |
+| 1 | R | Is Online |
+| 2 | R | Connect (Held)/Disconnect (Release) & corresponding feedback |
+
+#### Analogs
+
+| Join | Type (RW) | Description |
+| --- | --- | --- |
+| 1 | R | Socket Status |
+<!-- END Join Maps -->
+<!-- START Interfaces Implemented -->
+
+<!-- END Interfaces Implemented -->
+<!-- START Base Classes -->
+### Base Classes
+
+- JoinMapBaseAdvanced
+- EssentialsDevice
+<!-- END Base Classes -->
+<!-- START Public Methods -->
+
+<!-- END Public Methods -->
+<!-- START Bool Feedbacks -->
+
+<!-- END Bool Feedbacks -->
+<!-- START Int Feedbacks -->
+
+<!-- END Int Feedbacks -->
+<!-- START String Feedbacks -->
+
+<!-- END String Feedbacks -->
